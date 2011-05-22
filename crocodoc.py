@@ -1,4 +1,5 @@
 from restkit import Resource
+import json
 
 class Crocodoc(Resource):
     API_URL = 'https://crocodoc.com/api/v1' #no trailing slash
@@ -8,18 +9,24 @@ class Crocodoc(Resource):
         self.API_TOKEN = api_token
         super(Crocodoc, self).__init__(self.API_URL, **kwargs)
 
-    def upload_url(url, title = None, async = False, private = False):
-        '''Upload and convert a file referenced by URL.'''
-        #NOTE: We may not want to pass params that are default.
-        r = self.get('document/upload', params_dict = {
-                'url': url,
-                'title': title, #may need to check if this is blank or not
-                'async': async,
-                'private': private,
-            })
-        return r
+    def _merge_params(self, params, whitelist):
+        pass
+    
+    def request(self, *args, **kwargs):
+        '''
+        Override request method to have all requests return JSON.
+        '''
+        response = super(Crocodoc, self).request(*args, **kwargs)
+        return json.loads(response.body_string())
 
-    def upload_file(file, title = None, async = False, private = False):
+    def upload_url(self, url, **options):
+        '''Upload and convert a file referenced by URL.'''
+
+        options['token'] = self.API_TOKEN
+        options['url'] = url
+        return self.get('document/upload', params_dict = options)
+
+    def upload_file(self, file, title = None, async = False, private = False):
         '''Upload and convert a file uploaded via a POST request.'''
         pass
         
