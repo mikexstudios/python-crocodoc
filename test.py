@@ -4,13 +4,15 @@ import os #for environ
 
 class TestCrocodoc(unittest.TestCase):
     def setUp(self):
-        c = crocodoc.Crocodoc(os.environ['CROCODOC_API_KEY'])
+        self.crocodoc = crocodoc.Crocodoc(os.environ['CROCODOC_API_KEY'])
 
     def tearDown(self):
         pass
 
     def test_upload_url(self):
-        c.upload_url('http://www.dcaa.mil/chap6.pdf')
+        r = self.crocodoc.upload_url('http://www.dcaa.mil/chap6.pdf')
+        self.assertTrue('shortId' in r)
+        self.assertTrue('uuid' in r)
 
 
 if __name__ == '__main__':
