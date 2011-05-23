@@ -4,8 +4,8 @@ import json
 
 def process_json(fn):
     def wrapper(*args, **kwargs):
-        response = fn(*args, **kwargs)
-        return json.loads(response['body'])
+        response, content = fn(*args, **kwargs)
+        return json.loads(content)
     return wrapper
 
 class Crocodoc():
@@ -37,7 +37,7 @@ class Crocodoc():
         options['file'] = file
 
         return self.conn.post(urljoin(self.API_URL, 'document/upload'), 
-                args = options)
+                body = options)
         
     def status():
         pass

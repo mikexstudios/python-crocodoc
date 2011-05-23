@@ -1,1 +1,1 @@
--e git://github.com/gabrielfalcao/bolacha.git#egg=bolacha
+-e git://github.com/mikexstudios/bolacha.git#egg=bolacha
