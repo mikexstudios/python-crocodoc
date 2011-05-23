@@ -1,5 +1,5 @@
 from bolacha import Bolacha
-from urlparse import urljoin
+import urlparse
 import json
 
 def process_json(fn):
@@ -9,7 +9,7 @@ def process_json(fn):
     return wrapper
 
 class Crocodoc():
-    API_URL = 'https://crocodoc.com/api/v1' #no trailing slash
+    API_URL = 'https://crocodoc.com/api/v1/' #need trailing slash
     API_TOKEN = ''
 
     def __init__(self, api_token):
@@ -25,9 +25,11 @@ class Crocodoc():
 
         options['token'] = self.API_TOKEN
         options['url'] = url
-        
-        return self.conn.get(urljoin(self.API_URL, 'document/upload'), 
-                body = options)
+
+        return self.conn.get(
+                urlparse.urljoin(self.API_URL, 'document/upload'), 
+                body = options
+                )
 
     @process_json
     def upload_file(self, file, **options):
@@ -36,7 +38,8 @@ class Crocodoc():
         options['token'] = self.API_TOKEN
         options['file'] = file
 
-        return self.conn.post(urljoin(self.API_URL, 'document/upload'), 
+        return self.conn.post(
+                urlparse.urljoin(self.API_URL, 'document/upload'), 
                 body = options)
         
     def status():
