@@ -26,9 +26,12 @@ class Crocodoc(Resource):
         options['url'] = url
         return self.get('document/upload', params_dict = options)
 
-    def upload_file(self, file, title = None, async = False, private = False):
+    def upload_file(self, file, **options):
         '''Upload and convert a file uploaded via a POST request.'''
-        pass
+
+        options['token'] = self.API_TOKEN
+        options['file'] = file.name
+        return self.post('document/upload', params_dict = options)
         
     def status():
         pass
