@@ -1,1 +1,1 @@
-restkit
+-e git://github.com/mikexstudios/python-rest-client.git#egg=python_rest_client

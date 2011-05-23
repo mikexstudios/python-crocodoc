@@ -1,30 +1,30 @@
-from restkit import Resource
+from python_rest_client.restful_lib import Connection
 import json
 
-class Crocodoc(Resource):
+def process_request(fn):
+    def wrapper(*args, **kwargs):
+        response = fn(*args, **kwargs)
+        return json.loads(response['body'])
+    return wrapper
+
+class Crocodoc():
     API_URL = 'https://crocodoc.com/api/v1' #no trailing slash
     API_TOKEN = ''
 
-    def __init__(self, api_token, **kwargs):
+    def __init__(self, api_token):
         self.API_TOKEN = api_token
-        super(Crocodoc, self).__init__(self.API_URL, **kwargs)
+        self.conn = Connection(self.API_URL)
 
     def _merge_params(self, params, whitelist):
         pass
     
-    def request(self, *args, **kwargs):
-        '''
-        Override request method to have all requests return JSON.
-        '''
-        response = super(Crocodoc, self).request(*args, **kwargs)
-        return json.loads(response.body_string())
-
+    @process_request
     def upload_url(self, url, **options):
         '''Upload and convert a file referenced by URL.'''
 
         options['token'] = self.API_TOKEN
         options['url'] = url
-        return self.get('document/upload', params_dict = options)
+        return self.conn.request_get('/document/upload', args = options)
 
     def upload_file(self, file, **options):
         '''Upload and convert a file uploaded via a POST request.'''
