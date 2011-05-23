@@ -1,7 +1,8 @@
-from python_rest_client.restful_lib import Connection
+from bolacha import Bolacha
+from urlparse import urljoin
 import json
 
-def process_request(fn):
+def process_json(fn):
     def wrapper(*args, **kwargs):
         response = fn(*args, **kwargs)
         return json.loads(response['body'])
@@ -13,25 +14,30 @@ class Crocodoc():
 
     def __init__(self, api_token):
         self.API_TOKEN = api_token
-        self.conn = Connection(self.API_URL)
+        self.conn = Bolacha()
 
     def _merge_params(self, params, whitelist):
         pass
     
-    @process_request
+    @process_json
     def upload_url(self, url, **options):
         '''Upload and convert a file referenced by URL.'''
 
         options['token'] = self.API_TOKEN
         options['url'] = url
-        return self.conn.request_get('/document/upload', args = options)
+        
+        return self.conn.get(urljoin(self.API_URL, 'document/upload'), 
+                body = options)
 
+    @process_json
     def upload_file(self, file, **options):
         '''Upload and convert a file uploaded via a POST request.'''
 
         options['token'] = self.API_TOKEN
-        options['file'] = file.name
-        return self.post('document/upload', params_dict = options)
+        options['file'] = file
+
+        return self.conn.post(urljoin(self.API_URL, 'document/upload'), 
+                args = options)
         
     def status():
         pass

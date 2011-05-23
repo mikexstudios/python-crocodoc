@@ -1,1 +1,1 @@
--e git://github.com/mikexstudios/python-rest-client.git#egg=python_rest_client
+-e git://github.com/gabrielfalcao/bolacha.git#egg=bolacha
