@@ -21,6 +21,18 @@ class TestCrocodoc(unittest.TestCase):
         self.assertTrue('shortId' in r)
         self.assertTrue('uuid' in r)
 
+    def test_status_single(self):
+        #Upload a single file first
+        uploaded = self.crocodoc.upload('http://www.dcaa.mil/chap6.pdf')
+
+        r = self.crocodoc.status(uploaded['uuid'])
+
+        import pdb; pdb.set_trace()
+
+        self.assertTrue('status' in r)
+        self.assertTrue('viewable' in r)
+        self.assertTrue('uuid' in r)
+
 
 if __name__ == '__main__':
     #API Key needs to be set before unittests can be run.

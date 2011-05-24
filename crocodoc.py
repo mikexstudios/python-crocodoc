@@ -1,10 +1,11 @@
 from bolacha import Bolacha, multipart
 import urlparse
 import json
+import types #for str, unicode type
 
 def process_json(fn):
     def wrapper(*args, **kwargs):
-        response, content = fn(*args, **kwargs)
+        headers, content = fn(*args, **kwargs)
         return json.loads(content)
     return wrapper
 
@@ -41,8 +42,33 @@ class Crocodoc():
                 body = options
                 )
         
-    def status():
-        pass
+    @process_json
+    def status(self, uuids):
+        '''
+        Given a single or list of uuids, checks the conversion status of the
+        document(s).
+        '''
+        is_single = False #flag to indicate if we have a single uuid
+        options = { 'token': self.API_TOKEN }
+
+        #If we have a string, make it into a list
+        if isinstance(uuids, types.StringTypes):
+            uuids = [uuids, ]
+            is_single = True
+
+        #Convert our list of uuids into a comma-deliminated list of uuids
+        options['uuids'] = ','.join(uuids)
+
+        headers, content = self.conn.get(
+                urlparse.urljoin(self.API_URL, 'document/status'), 
+                body = options
+                )
+        #If only a single uuid was queried, then modify the response content
+        #by removing the '[' and ']' that denote a list.
+        if is_single:
+            return headers, content[1:-1]
+        return headers, content
+
 
     def delete():
         pass
