@@ -1,4 +1,4 @@
-from bolacha import Bolacha
+from bolacha import Bolacha, multipart
 import urlparse
 import json
 
@@ -20,27 +20,26 @@ class Crocodoc():
         pass
     
     @process_json
-    def upload_url(self, url, **options):
-        '''Upload and convert a file referenced by URL.'''
-
+    def upload(self, url_or_file, **options):
+        '''
+        Upload and convert a file referenced by URL or uploaded via a POST
+        request.
+        '''
         options['token'] = self.API_TOKEN
-        options['url'] = url
 
+        #Check if we have a url or file
+        if multipart.is_file(url_or_file):
+            options['file'] = url_or_file
+            return self.conn.post(
+                    urlparse.urljoin(self.API_URL, 'document/upload'), 
+                    body = options)
+
+        #Otherwise, we just have a url
+        options['url'] = url_or_file
         return self.conn.get(
                 urlparse.urljoin(self.API_URL, 'document/upload'), 
                 body = options
                 )
-
-    @process_json
-    def upload_file(self, file, **options):
-        '''Upload and convert a file uploaded via a POST request.'''
-
-        options['token'] = self.API_TOKEN
-        options['file'] = file
-
-        return self.conn.post(
-                urlparse.urljoin(self.API_URL, 'document/upload'), 
-                body = options)
         
     def status():
         pass

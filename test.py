@@ -11,13 +11,13 @@ class TestCrocodoc(unittest.TestCase):
         pass
 
     def test_upload_url(self):
-        r = self.crocodoc.upload_url('http://www.dcaa.mil/chap6.pdf')
+        r = self.crocodoc.upload('http://www.dcaa.mil/chap6.pdf')
         self.assertTrue('shortId' in r)
         self.assertTrue('uuid' in r)
 
     def test_upload_file(self):
         with open('test.pdf', 'r') as f:
-            r = self.crocodoc.upload_file(f)
+            r = self.crocodoc.upload(f)
         self.assertTrue('shortId' in r)
         self.assertTrue('uuid' in r)
 
