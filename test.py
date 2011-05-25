@@ -3,6 +3,8 @@ import crocodoc
 import os #for environ
 import time #for sleep (to rate limit)
 
+#NOTE: If you receive errors during testing, it may result from crocodoc limiting
+#free users to two simultaneous conversions at once.
 RATE_LIMIT_TIME = 5 #sec
 
 class TestCrocodoc(unittest.TestCase):
@@ -60,6 +62,34 @@ class TestCrocodoc(unittest.TestCase):
         #Then delete it
         r = self.crocodoc.delete(uploaded['uuid'])
         self.assertTrue(r)
+
+    def test_share(self):
+        #Upload a single file first
+        uploaded = self.crocodoc.upload(self.sample_pdf_url)
+        #Get new shortId
+        r = self.crocodoc.share(uploaded['uuid'])
+        self.assertTrue('shortId' in r)
+
+    def test_get_session(self):
+        #Upload a single file first
+        uploaded = self.crocodoc.upload(self.sample_pdf_url)
+        #Get sessionId
+        r = self.crocodoc.get_session(uploaded['uuid'])
+        self.assertTrue('sessionId' in r)
+
+    def test_embeddable_viewer_url(self):
+        shortId = 'y1O7rK'
+        target_url = 'http://crocodoc.com/%s?embedded=true' % shortId
+
+        r = self.crocodoc.embeddable_viewer_url(shortId)
+        self.assertEqual(r, target_url)
+
+    def test_session_based_viewer_url(self):
+        sessionId = 'fgH9qWEwnsJUeB0'
+        target_url = 'https://crocodoc.com/view/?sessionId=%s' % sessionId
+
+        r = self.crocodoc.session_based_viewer_url(sessionId)
+        self.assertEqual(r, target_url)
 
 
 if __name__ == '__main__':

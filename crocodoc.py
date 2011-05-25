@@ -2,6 +2,7 @@ from bolacha import Bolacha, multipart
 import urlparse
 import json
 import types #for str, unicode type
+from exceptions import NotImplementedError
 
 def process_json(fn):
     def wrapper(*args, **kwargs):
@@ -84,19 +85,50 @@ class Crocodoc():
                 )
 
 
-    def download():
-        pass
+    # TODO: Currently not implemented because raw file should be saved to
+    #       filesystem.
+    def download(self, uuid, **options):
+        options['token'] = self.API_TOKEN
+        raise NotImplementedError
 
-    def share():
-        pass
+    # TODO: Since we know share will only return a shortID, we should just pull
+    #       that out and return the shortID value directly.
+    @process_json
+    def share(self, uuid, **options):
+        '''
+        Given a uuid, creates a new "short ID" that can be used to share a 
+        document.
+        '''
+        options['token'] = self.API_TOKEN
+        options['uuid'] = uuid
 
-    def get_session():
-        pass
+        return self.conn.get(
+                urlparse.urljoin(self.API_URL, 'document/share'), 
+                body = options
+                )
+
+    # TODO: Since we know this will only return a sessionId, we should just pull
+    #       that out and return the sessionId value directly.
+    @process_json
+    def get_session(self, uuid, **options):
+        '''
+        Given a uuid, creates a session ID for session-based document viewing.
+        Each session ID may only be used once.
+        '''
+        options['token'] = self.API_TOKEN
+        options['uuid'] = uuid
+
+        return self.conn.get(
+                urlparse.urljoin(self.API_URL, 'session/get'), 
+                body = options
+                )
 
     # Helper methods:
 
-    def embeddable_viewer_url():
-        pass
+    def embeddable_viewer_url(self, shortId):
+        '''Given a shortId, returns the embeddable URL.'''
+        return 'http://crocodoc.com/%s?embedded=true' % shortId
 
-    def session_based_viewer_url():
-        pass
+    def session_based_viewer_url(self, sessionId):
+        '''Given a sessionId, returns the session-based viewing URL.'''
+        return 'https://crocodoc.com/view/?sessionId=%s' % sessionId
