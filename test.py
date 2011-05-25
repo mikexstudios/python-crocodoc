@@ -3,6 +3,8 @@ import crocodoc
 import os #for environ
 
 class TestCrocodoc(unittest.TestCase):
+    sample_pdf_url = 'http://www.irs.gov/pub/irs-pdf/i1040ez.pdf'
+
     def setUp(self):
         self.crocodoc = crocodoc.Crocodoc(os.environ['CROCODOC_API_KEY'])
 
@@ -11,7 +13,7 @@ class TestCrocodoc(unittest.TestCase):
         pass
 
     def test_upload_url(self):
-        r = self.crocodoc.upload('http://www.dcaa.mil/chap6.pdf')
+        r = self.crocodoc.upload(self.sample_pdf_url)
         self.assertTrue('shortId' in r)
         self.assertTrue('uuid' in r)
 
@@ -23,15 +25,13 @@ class TestCrocodoc(unittest.TestCase):
 
     def test_status_single(self):
         #Upload a single file first
-        uploaded = self.crocodoc.upload('http://www.dcaa.mil/chap6.pdf')
-
+        uploaded = self.crocodoc.upload(self.sample_pdf_url)
         r = self.crocodoc.status(uploaded['uuid'])
-
-        import pdb; pdb.set_trace()
 
         self.assertTrue('status' in r)
         self.assertTrue('viewable' in r)
         self.assertTrue('uuid' in r)
+
 
 
 if __name__ == '__main__':
