@@ -54,6 +54,12 @@ class TestCrocodoc(unittest.TestCase):
             self.assertTrue('viewable' in status)
             self.assertTrue('uuid' in status)
 
+    def test_delete(self):
+        #Upload a single file first
+        uploaded = self.crocodoc.upload(self.sample_pdf_url)
+        #Then delete it
+        r = self.crocodoc.delete(uploaded['uuid'])
+        self.assertTrue(r)
 
 
 if __name__ == '__main__':

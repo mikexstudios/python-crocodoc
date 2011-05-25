@@ -70,8 +70,19 @@ class Crocodoc():
         return headers, content
 
 
-    def delete():
-        pass
+    @process_json
+    def delete(self, uuid):
+        '''Given a single uuid, deletes the uploaded file.'''
+        options = { 
+                'token': self.API_TOKEN,
+                'uuid': uuid
+                }
+
+        return self.conn.get(
+                urlparse.urljoin(self.API_URL, 'document/delete'), 
+                body = options
+                )
+
 
     def download():
         pass
