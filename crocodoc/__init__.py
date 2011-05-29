@@ -123,12 +123,14 @@ class Crocodoc():
                 body = options
                 )
 
-    # Helper methods:
+    # Helper methods (static):
 
-    def embeddable_viewer_url(self, shortId):
+    @staticmethod
+    def embeddable_viewer_url(shortId):
         '''Given a shortId, returns the embeddable URL.'''
         return 'http://crocodoc.com/%s?embedded=true' % shortId
 
-    def session_based_viewer_url(self, sessionId):
+    @staticmethod
+    def session_based_viewer_url(sessionId):
         '''Given a sessionId, returns the session-based viewing URL.'''
         return 'https://crocodoc.com/view/?sessionId=%s' % sessionId

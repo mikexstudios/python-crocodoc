@@ -81,14 +81,14 @@ class TestCrocodoc(unittest.TestCase):
         shortId = 'y1O7rK'
         target_url = 'http://crocodoc.com/%s?embedded=true' % shortId
 
-        r = self.crocodoc.embeddable_viewer_url(shortId)
+        r = crocodoc.Crocodoc.embeddable_viewer_url(shortId)
         self.assertEqual(r, target_url)
 
     def test_session_based_viewer_url(self):
         sessionId = 'fgH9qWEwnsJUeB0'
         target_url = 'https://crocodoc.com/view/?sessionId=%s' % sessionId
 
-        r = self.crocodoc.session_based_viewer_url(sessionId)
+        r = crocodoc.Crocodoc.session_based_viewer_url(sessionId)
         self.assertEqual(r, target_url)
 
 
