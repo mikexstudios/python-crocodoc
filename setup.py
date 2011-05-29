@@ -8,7 +8,9 @@ setup(
     author = 'Michael Huynh',
     author_email = 'mike@mikexstudios.com',
     url = 'http://github.com/mikexstudios/python-crocodoc',
-    classifiers=[
+    install_requires = ['bolacha==dev'], #force checkout of my github fork
+    dependency_links = ['http://github.com/mikexstudios/bolacha/tarball/master#egg=bolacha-dev'], 
+    classifiers = [
         'Programming Language :: Python', 
         'License :: OSI Approved :: BSD License',
     ]
