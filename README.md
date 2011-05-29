@@ -59,9 +59,13 @@ Then run:
 
     python test.py
 
+NOTE: Tests may fail because crocodoc limits free users to two simultaneous
+      conversions at once.
+
 
 TODO
 ----
 
 1.  Implement `download` method.
 2.  See TODOs attached to `share` and `get_session`.
+3.  Delete uploaded documents after each test (in `test.py`).
